@@ -15,6 +15,14 @@ router.get('/', (req, res) => {
   res.json(categories);
 })
 
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({
+    name: faker.vehicle.type(),
+    id
+  })
+})
+
 router.get('/:categoryId/products/:productId', (req, res) => {
   const { categoryId, productId} = req.params;
   res.json({
@@ -23,5 +31,41 @@ router.get('/:categoryId/products/:productId', (req, res) => {
     name: "Xbox juan"
   })
 });
+
+router.post('/', (req, res) => {
+  const body = req.body;
+  res.json({
+    message: "create",
+    data: body
+  })
+})
+
+router.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: "updated",
+    data: body,
+    id
+  })
+})
+
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: "updated",
+    data: body,
+    id
+  })
+})
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({
+    message: "deleted",
+    id
+  })
+})
 
 module.exports = router;
