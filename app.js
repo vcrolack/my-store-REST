@@ -11,18 +11,18 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
-const whitelist = ['http://localhost:8080', 'https://myapp.com'];
-const options = {
-  origin: (origin, callback) => {
-    if (whitelist.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Permision denied'))
-    }
-  }
-}
-app.use(cors(options));
+// const whitelist = ['http://localhost:8080', 'https://myapp.com'];
+// const options = {
+//   origin: (origin, callback) => {
+//     if (whitelist.includes(origin)) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Permision denied'))
+//     }
+//   }
+// }
 
 routerApi(app);
 
