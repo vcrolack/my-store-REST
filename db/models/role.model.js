@@ -1,36 +1,18 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const USER_TABLE = 'users';
+const ROLE_TABLE = 'roles';
 
-const UserSchema = {
+const RoleSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  firstName: {
+  name: {
     allowNull: false,
-    type: DataTypes.STRING,
-    field: 'first_name'
-  },
-  lastName: {
-    allowNull: false,
-    type: DataTypes.STRING,
-    field: 'last_name'
-  },
-  email: {
-    allowNull: false,
-    type: DataTypes.STRING,
     unique: true,
-  },
-  password: {
-    allowNull: false,
     type: DataTypes.STRING,
-  },
-  role: {
-    allowNull: false,
-    type: DataTypes.INTEGER
   },
   createdAt: {
     allowNull: false,
@@ -45,20 +27,20 @@ const UserSchema = {
   },
 };
 
-class User extends Model {
+class Role extends Model {
   static associate() {}
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: ROLE_TABLE,
+      modelName: 'Role',
       timestamps: false,
     };
   }
 }
 
 module.exports = {
-  USER_TABLE,
-  UserSchema,
-  User,
+  ROLE_TABLE,
+  RoleSchema,
+  Role,
 };

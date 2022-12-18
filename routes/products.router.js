@@ -56,7 +56,7 @@ router.patch(
       const { id } = req.params;
       const body = req.body;
       const product = await service.update(id, body);
-      res.json(product);
+      res.status(200).json(product);
     } catch (e) {
       next(e);
     }
@@ -67,7 +67,7 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = service.delete(id);
-    res.json(result);
+    res.status(200).json(result);
   } catch (e) {
     next(e);
   }
