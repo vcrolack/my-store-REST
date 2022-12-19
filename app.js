@@ -5,6 +5,7 @@ const {
   logErrors,
   errorHandler,
   boomErrorHandler,
+  emailError
 } = require('./middlewares/error.handler');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cors());
 routerApi(app);
 
 app.use(logErrors);
+app.use(emailError);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
