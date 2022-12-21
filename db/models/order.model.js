@@ -12,6 +12,7 @@ const OrderSchema = {
   products: {
     allowNull: false,
     type: DataTypes.ARRAY(DataTypes.INTEGER),
+    //type: DataTypes.JSON,
   },
   document: {
     allowNull: false,
