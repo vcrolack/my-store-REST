@@ -1,5 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+const { USER_TABLE } = require('./user.model')
+
 const CLIENT_TABLE = 'clients';
 
 const ClientSchema = {
@@ -8,6 +10,18 @@ const ClientSchema = {
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
+  },
+  userId: {
+    field: 'user_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    unique: true,
+    references: {
+      model: USER_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   },
   firstName: {
     allowNull: false,
@@ -20,15 +34,6 @@ const ClientSchema = {
     field: 'last_name',
   },
   address: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  email: {
-    allowNull: false,
-    unique: true,
-    type: DataTypes.STRING,
-  },
-  password: {
     allowNull: false,
     type: DataTypes.STRING,
   },
@@ -50,7 +55,9 @@ const ClientSchema = {
 };
 
 class Client extends Model {
-  static associate() {}
+  static associate(models) {
+    this.belongsTo(models.User, { as: 'user' });
+  }
   static config(sequelize) {
     return {
       sequelize,

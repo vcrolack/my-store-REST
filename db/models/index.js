@@ -14,6 +14,9 @@ function setUpModels(sequelize) {
   Client.init(ClientSchema, Client.config(sequelize));
   Order.init(OrderSchema, Order.config(sequelize));
   Role.init(RoleSchema, Role.config(sequelize));
+
+  User.associate(sequelize.models);
+  Client.associate(sequelize.models);
 }
 
 module.exports = setUpModels;

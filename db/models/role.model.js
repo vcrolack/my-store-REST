@@ -28,7 +28,8 @@ const RoleSchema = {
 };
 
 class Role extends Model {
-  static associate() {}
+  static associate() {
+  }
   static config(sequelize) {
     return {
       sequelize,

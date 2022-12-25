@@ -4,31 +4,10 @@ const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
 
 class ProductService {
-  constructor() {
-    this.products = [];
-    this.generate();
-  }
-
-  generate() {
-    const limit = 100;
-    for (let i = 0; i < limit; i++) {
-      this.products.push({
-        id: faker.datatype.uuid(),
-        name: faker.commerce.productName(),
-        price: parseInt(faker.commerce.price(), 10),
-        image: faker.image.imageUrl(),
-        isBlock: faker.datatype.boolean(),
-      });
-    }
-  }
+  constructor() {}
 
   async create(data) {
-    const newProduct = {
-      id: faker.datatype.uuid(),
-      ...data,
-    };
-    this.products.push(newProduct);
-    return newProduct;
+    const newProduct = await models.Product.create(data);
   }
 
   async find() {
