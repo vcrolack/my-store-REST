@@ -1,4 +1,3 @@
-const faker = require('faker');
 const boom = require('@hapi/boom');
 
 const { models } = require('../libs/sequelize');
@@ -8,6 +7,10 @@ class ProductService {
 
   async create(data) {
     const newProduct = await models.Product.create(data);
+    if (!newProduct) {
+      throw boom.badRequest("Product wasn't created, check the attributes");
+    }
+    return newProduct;
   }
 
   async find() {
