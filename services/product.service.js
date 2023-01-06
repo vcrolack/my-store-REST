@@ -17,40 +17,39 @@ class ProductService {
     const response = await models.Product.findAll({
       include: ['category']
     });
+    if (!response) {
+      throw boom.notFound('Products not found')
+    }
     return response;
   }
 
   async findOne(id) {
-    const product = this.products.find((product) => product.id === id);
+    const product = await models.Product.findByPk(id, {
+      include: ['category']
+    })
     if (!product) {
       throw boom.notFound('Product not found');
-    }
-    if (product.isBlock) {
-      throw boom.conflict('Product is block');
     }
     return product;
   }
 
   async update(id, changes) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index === -1) {
+    changes.updatedAt = new Date();
+    const product = await this.findOne(id);
+    if (!product) {
       throw boom.notFound('Product not found');
     }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes,
-    };
-    return this.products[index];
+    const response = await product.update(changes);
+    return response;
   }
 
   async delete(id) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('Product not found');
+    const product = await this.findOne(id);
+    if (!product) {
+      throw boom.notFound('Product not found')
     }
-    this.products.splice(index, 1);
-    return { message: 'deleted', id };
+    product.destroy();
+    return {id, message: 'This product was deleted'}
   }
 }
 
