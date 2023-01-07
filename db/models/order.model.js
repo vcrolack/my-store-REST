@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CLIENT_TABLE } = require('./client.model');
 
 const ORDER_TABLE = 'orders';
 
@@ -23,10 +24,27 @@ const OrderSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
     field: 'client_id',
+    references: {
+      model: CLIENT_TABLE,
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   },
   total: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      if (this.items.length > 0) {
+        return this.items.reduce((total, item) => {
+          return total + (item.price * item.OrderProduct.amount);
+        }, 0);
+      }
+      return 0;
+    },
+  },
+  state: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   createdAt: {
     allowNull: false,
@@ -42,7 +60,17 @@ const OrderSchema = {
 };
 
 class Order extends Model {
-  static associate() {}
+  static associate(models) {
+    this.belongsTo(models.Client, {
+      as: 'client',
+    });
+    this.belongsToMany(models.Product, {
+      as: 'items',
+      through: models.OrderProduct,
+      foreignKey: 'orderId',
+      otherKey: 'product_id',
+    });
+  }
   static config(sequelize) {
     return {
       sequelize,

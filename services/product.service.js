@@ -36,18 +36,12 @@ class ProductService {
   async update(id, changes) {
     changes.updatedAt = new Date();
     const product = await this.findOne(id);
-    if (!product) {
-      throw boom.notFound('Product not found');
-    }
     const response = await product.update(changes);
     return response;
   }
 
   async delete(id) {
     const product = await this.findOne(id);
-    if (!product) {
-      throw boom.notFound('Product not found')
-    }
     product.destroy();
     return {id, message: 'This product was deleted'}
   }
