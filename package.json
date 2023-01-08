@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vcrolack/my-store-REST"
+  },
   "scripts": {
     "start": "nodemon app.js",
     "prod": "node app.js",
