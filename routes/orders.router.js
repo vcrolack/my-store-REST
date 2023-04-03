@@ -5,23 +5,29 @@ const {
   updatedOrderSchema,
   createOrderSchema,
   getOrderSchema,
-  addItemSchema
+  addItemSchema,
 } = require('../schemas/Order.schema');
+const passport = require('passport');
 
 const router = express.Router();
 const service = new OrderService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const orders = await service.find();
-    res.status(200).json(orders);
-  } catch (e) {
-    next(e);
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const orders = await service.find();
+      res.status(200).json(orders);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 router.get(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(getOrderSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -36,6 +42,7 @@ router.get(
 
 router.post(
   '/',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(createOrderSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -50,6 +57,7 @@ router.post(
 
 router.post(
   '/add-item',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(addItemSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -60,10 +68,11 @@ router.post(
       next(e);
     }
   }
-)
+);
 
 router.patch(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
   validatorHandler(updatedOrderSchema, 'params'),
   validatorHandler(updatedOrderSchema, 'body'),
   async (req, res, next) => {
@@ -78,14 +87,18 @@ router.patch(
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const response = await service.delete(id);
-    res.status(200).json(response);
-  } catch (e) {
-    next(e);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const response = await service.delete(id);
+      res.status(200).json(response);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 module.exports = router;

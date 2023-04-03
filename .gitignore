@@ -219,5 +219,7 @@ postgres_data
 mysql_data
 pass-hash.js
 pass-verify.js
+token-sign.js
+token-verify.js
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,windows,linux
