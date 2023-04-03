@@ -20,7 +20,7 @@ const createClientSchema = joi.object({
     lastName: lastName.required(),
     email: email.required(),
     password: password.required(),
-    roleId: roleId.required()
+    roleId: roleId
   })
 });
 
