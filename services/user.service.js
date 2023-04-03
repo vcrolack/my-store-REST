@@ -43,6 +43,16 @@ class UserService {
     user.destroy();
     return { id, message: 'This user was deleted' };
   }
+
+  async findByEmail(email) {
+    const response = await models.User.findOne({
+      where: {email}
+    });
+    return response;
+  }
 }
+
+
+
 
 module.exports = UserService;

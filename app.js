@@ -14,6 +14,7 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cors());
+require('./utils/auth')
 
 // const whitelist = ['http://localhost:8080', 'https://myapp.com'];
 // const options = {
