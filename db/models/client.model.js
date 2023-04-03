@@ -21,7 +21,7 @@ const ClientSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   },
   firstName: {
     allowNull: false,
@@ -56,7 +56,7 @@ const ClientSchema = {
 
 class Client extends Model {
   static associate(models) {
-    this.belongsTo(models.User, { as: 'user' });
+    this.belongsTo(models.User, { as: 'user', onDelete: 'CASCADE' });
     this.hasMany(models.Order, {
       as: 'orders',
       foreignKey: 'clientId',

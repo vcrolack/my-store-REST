@@ -1,11 +1,12 @@
 const express = require('express');
 const routerApi = require('./routes');
+const { checkApiKey } = require('./middlewares/auth.handler');
 const cors = require('cors');
 const {
   logErrors,
   errorHandler,
   boomErrorHandler,
-  emailError
+  emailError,
 } = require('./middlewares/error.handler');
 
 const app = express();
@@ -34,6 +35,10 @@ app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.send('testing app');
+});
+
+app.get('/nueva-ruta', checkApiKey,(req, res) => {
+  res.send('Hola perú');
 });
 
 app.listen(port, () => {

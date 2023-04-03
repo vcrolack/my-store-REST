@@ -39,7 +39,14 @@ router.post(
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newClient = await service.create(body);
+      const newData = {
+        ...body,
+        user: {
+          ...body.user,
+          roleId: 3,
+        },
+      };
+      const newClient = await service.create(newData);
       res.status(201).json(newClient);
     } catch (e) {
       next(e);
@@ -47,25 +54,30 @@ router.post(
   }
 );
 
-router.patch('/:id', validatorHandler(updatedClientSchema, 'params'), validatorHandler(updatedClientSchema, 'body'), async (req, res, next) => {
-  try {
-    const {id} = req.params;
-    const body = req.body;
-    const client = await service.update(id, body);
-    res.status(200).json(client);
-  } catch (e) {
-    next(e);
+router.patch(
+  '/:id',
+  validatorHandler(updatedClientSchema, 'params'),
+  validatorHandler(updatedClientSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const client = await service.update(id, body);
+      res.status(200).json(client);
+    } catch (e) {
+      next(e);
+    }
   }
-})
+);
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const result = await service.delete(id);
     res.status(200).json(result);
   } catch (e) {
     next(e);
   }
-})
+});
 
 module.exports = router;
