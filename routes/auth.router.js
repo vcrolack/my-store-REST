@@ -1,5 +1,7 @@
 const express = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const {config} = require('../config/config');
 
 const router = express.Router();
 
@@ -9,7 +11,16 @@ router.post(
   async (req, res, next) => {
     try {
       const { user } = req;
-      res.status(200).json({ data: user, message: 'Logged in' });
+
+      const payload = {
+        sub: user.id,
+        role: user.roleId,
+      };
+      const token = jwt.sign(payload, config.jwtSecret);
+      res.status(200).json({
+        user,
+        token
+      });
     } catch (e) {
       next(e);
     }

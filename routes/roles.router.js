@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const RoleService = require('../services/role.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
@@ -6,21 +7,29 @@ const {
   createRoleSchema,
   getRoleSchema,
 } = require('../schemas/role.schema');
+const {checkRoles} = require('../middlewares/auth.handler');
 
 const router = express.Router();
 const service = new RoleService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const roles = await service.find();
-    res.status(200).json(roles);
-  } catch (e) {
-    next(e);
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
+  async (req, res, next) => {
+    try {
+      const roles = await service.find();
+      res.status(200).json(roles);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 router.get(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(getRoleSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -35,6 +44,8 @@ router.get(
 
 router.post(
   '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(createRoleSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -49,6 +60,8 @@ router.post(
 
 router.patch(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(updatedRoleSchema, 'params'),
   validatorHandler(updatedRoleSchema, 'body'),
   async (req, res, next) => {
@@ -63,14 +76,19 @@ router.patch(
   }
 );
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = service.delete(id);
-    res.status(200).json(result);
-  } catch (e) {
-    next(e);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = service.delete(id);
+      res.status(200).json(result);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 module.exports = router;
