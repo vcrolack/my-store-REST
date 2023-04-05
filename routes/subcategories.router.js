@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const SubcategoryService = require('../services/subcategory.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
@@ -6,7 +7,7 @@ const {
   createSubcategorySchema,
   updatedSubcategorySchema,
 } = require('../schemas/category.schema');
-const passport = require('passport');
+const { checkRoles } = require('../middlewares/auth.handler');
 
 const router = express.Router();
 const service = new SubcategoryService();
@@ -14,6 +15,7 @@ const service = new SubcategoryService();
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   async (req, res, next) => {
     try {
       const subcategories = service.find();
@@ -27,6 +29,7 @@ router.get(
 router.get(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(getSubcategorySchema, 'params'),
   async (req, res, next) => {
     try {
@@ -42,6 +45,7 @@ router.get(
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(createSubcategorySchema, 'body'),
   async (req, res, next) => {
     try {
@@ -57,6 +61,7 @@ router.post(
 router.patch(
   '/id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(updatedSubcategorySchema, 'params'),
   validatorHandler(updatedSubcategorySchema, 'body'),
   async (req, res, next) => {
@@ -74,6 +79,7 @@ router.patch(
 router.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   async (req, res, next) => {
     try {
       const { id } = req.params;

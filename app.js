@@ -30,8 +30,8 @@ require('./utils/auth')
 routerApi(app);
 
 app.use(logErrors);
-app.use(emailError);
 app.use(boomErrorHandler);
+app.use(emailError);
 app.use(errorHandler);
 
 app.get('/', (req, res) => {

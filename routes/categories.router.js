@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const boom = require('@hapi/boom');
 const CategoryService = require('../services/category.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
@@ -8,6 +7,7 @@ const {
   createCategorySchema,
   updatedCategorySchema,
 } = require('../schemas/category.schema');
+const {checkRoles} = require ('../middlewares/auth.handler');
 
 const router = express.Router();
 const service = new CategoryService();
@@ -15,6 +15,7 @@ const service = new CategoryService();
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1, 2, 3),
   async (req, res, next) => {
     try {
       const categories = await service.find();
@@ -28,6 +29,7 @@ router.get(
 router.get(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1, 2 , 3),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
@@ -43,14 +45,16 @@ router.get(
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
     try {
+      console.log('Holaaaa')
       const body = req.body;
       const newCategory = await service.create(body);
       res.status(201).json(newCategory);
     } catch (e) {
-      next(boom.unauthorized('Wrong data'));
+      next(e);
     }
   }
 );
@@ -58,6 +62,7 @@ router.post(
 router.patch(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   validatorHandler(updatedCategorySchema, 'params'),
   validatorHandler(updatedCategorySchema, 'body'),
   async (req, res, next) => {
@@ -75,6 +80,7 @@ router.patch(
 router.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),
+  checkRoles(1),
   async (req, res, next) => {
     try {
       const { id } = req.params;
