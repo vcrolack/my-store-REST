@@ -5,6 +5,11 @@ const config = {
   jwtSecret: process.env.JWT_SECRET,
 };
 
+const configEmail = {
+  emailKey: process.env.EMAIL_KEY,
+  email: process.env.EMAIL,
+}
+
 const configPostgres = {
   env: process.env.NODE_ENV || 'dev',
   dbPort: process.env.DB_PORT || 3000,
@@ -23,4 +28,4 @@ const configMySQL = {
   dbName: process.env.MYSQL_DB,
 };
 
-module.exports = { configPostgres, configMySQL, config };
+module.exports = { configPostgres, configMySQL, config, configEmail };
